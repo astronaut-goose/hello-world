@@ -4,7 +4,8 @@
 #include <array>
 #include <cstdint>
 
-class Chip8{
+class Chip8
+{
 
 private:
   std::array<std::uint8_t, 16> V;        // 16 8-bit general purpose registers (V0-VF)
