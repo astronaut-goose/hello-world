@@ -25,6 +25,8 @@ std::array<std::uint8_t, 80> fontset =
     0xF0, 0x80, 0xF0, 0x80, 0x80  //F
 };
 
+char randomNumber = 122; //HEHEHE
+
 void Chip8::initialize(){
 
   // Initialize registers and memory once
@@ -82,7 +84,7 @@ void Chip8::emulateOneCycle(){
 
     //case 0x0000:
       //switch  DO ZROBIENIA BLOK SWITCHÓW DLA 0x0000
-    
+
     case 0x1000:  // 1nnn
       pc = opcode & 0x0FFF;
       break;
@@ -94,33 +96,33 @@ void Chip8::emulateOneCycle(){
       break;
 
     case 0x3000:  // 3xkk -- błąd w instrukcji, powinno być pc += 4
-      if( V[opcode & 0x0F00 >> 8] == opcode & 0x00FF )
+      if( V[(opcode & 0x0F00) >> 8] == opcode & 0x00FF )
         pc += 4;
       else
         pc += 2;
       break;
 
     case 0x4000:  // 4xkk
-      if( V[opcode & 0x0F00 >> 8] != opcode & 0x00FF )
+      if( V[(opcode & 0x0F00) >> 8] != opcode & 0x00FF )
         pc += 4;
       else
         pc += 2;
       break;
 
     case 0x5000:  // 5xy0
-      if( V[opcode & 0x0F00 >> 8] == V[opcode & 0x00F0 >> 4] )
+      if( V[(opcode & 0x0F00) >> 8] == V[(opcode & 0x00F0) >> 4] )
         pc += 4;
       else
         pc += 2;
       break;
 
     case 0x6000:  // 6xkk
-      V[opcode & 0x0F00 >> 8] = opcode & 0x00FF;
+      V[(opcode & 0x0F00) >> 8] = opcode & 0x00FF;
       pc += 2;
       break;
 
     case 0x7000:  // 7xkk
-      V[opcode & 0x0F00 >> 8] += opcode & 0x00FF;
+      V[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
       pc += 2;
       break;
 
@@ -128,7 +130,7 @@ void Chip8::emulateOneCycle(){
       //switch  DO ZROBIENIA BLOK SWITCHÓW DLA 0x8000
 
     case 0x9000:  // 9xy0
-      if( V[opcode & 0x0F00 >> 8] != V[opcode & 0x00F0 >> 4] )
+      if( V[(opcode & 0x0F00) >> 8] != V[(opcode & 0x00F0) >> 4] )
         pc += 4;
       else
         pc += 2;
@@ -140,16 +142,19 @@ void Chip8::emulateOneCycle(){
       break;
 
     case 0xB000:  // Bnnn
-      pc = opcode & 0x0FFF
+      pc = (opcode & 0x0FFF) + V[0];
+      break;
 
-    case 0xC000:  // Cxkk
+    case 0xC000:  // Cxkk DO PRZEROBIENIA, DODAJ SRAND
+      V[(opcode & 0x0F00) >> 8] = (opcode & 0x00FF) & randomNumber;
 
     case 0xD000:  // Dxyn
 
-    //case 0xE000:  
+    //case 0xE000:
       // switch DO ZROBIENIA BLOK SWITCHÓW DLA 0xE000
 
-    case 0xA000:  // Annn
+    //case 0xF000:
+      // switch DO ZROBIENIA BLOK SWITCHÓW DLA 0xF000
 
 
   }
